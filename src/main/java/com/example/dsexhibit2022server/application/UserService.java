@@ -22,7 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Long addUser(HttpServletRequest servletRequest, UserRequest.SignUpRequest request) throws Exception {
+    public Long addUser(UserRequest.SignUpRequest request) throws Exception {
         log.info("[SERVICE] addUser");
 
         //이미 가입된 유저인지 확인
