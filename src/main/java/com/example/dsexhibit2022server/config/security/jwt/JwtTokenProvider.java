@@ -51,7 +51,7 @@ public class JwtTokenProvider {
     }
 
 
-    public Long getUserPKByServlet(HttpServletRequest httpServletRequest) { //throws RestApiException
+    public String getUserPKByServlet(HttpServletRequest httpServletRequest) { //throws RestApiException
         String token = "";
 //        try {
             token = resolveToken(httpServletRequest);
@@ -84,22 +84,21 @@ public class JwtTokenProvider {
     }
 
     //토큰에서 회원 정보 추출
-    private Long getUserPK(String token) {
+    private String getUserPK(String token) {
         long userPK;
 //        try {
-            String userPKString = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject(); //setSubject했던 값 가져오기
-            userPK = Long.parseLong(userPKString);
+            String email = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject(); //setSubject했던 값 가져오기
 //        } catch (Exception e) {
 //            throw new RestApiException(MemberErrorCode.INVALID_TOKEN); //토큰에서 회원 정보를 확인할 수 없을 때 throw
 //        }
-        return userPK;
+        return email;
     }
 
     //토큰에서 인증정보 조회
 //    public Authentication getAuthentication(String token) {
     public Authentication getAuthenticationByServlet(HttpServletRequest httpServletRequest) {
         String token = resolveToken(httpServletRequest);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPK(token).toString()); //토큰에서 회원정보 추출하는 getUserOK메서드 사용
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPK(token)); //토큰에서 회원정보 추출하는 getUserOK메서드 사용
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
