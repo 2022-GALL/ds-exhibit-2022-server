@@ -1,13 +1,14 @@
 package com.example.dsexhibit2022server.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
+@Builder
 @Setter
 @Getter
 @AllArgsConstructor
@@ -35,8 +36,12 @@ public class Work {
     @Column(length = 500)
     private String link;
 
+    @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
+    @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
     @JoinColumn(name = "department_idx", nullable = false)
