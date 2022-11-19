@@ -5,9 +5,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Builder
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Table(name="author")

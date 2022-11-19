@@ -34,7 +34,6 @@ public class WorkService {
 
         // Major, Department
         String majorCode = request.getMajor();
-
         Major major = majorRepository.findByCode(majorCode);
         Department department = major.getDepartment();
 

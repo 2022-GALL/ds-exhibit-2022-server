@@ -8,9 +8,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
 
-@Builder
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Table(name="work")

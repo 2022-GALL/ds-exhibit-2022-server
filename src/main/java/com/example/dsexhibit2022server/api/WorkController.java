@@ -19,10 +19,8 @@ import java.time.LocalDate;
 @RequestMapping("api")
 @RequiredArgsConstructor
 public class WorkController {
-
-    private final WorkService workService;
-
     private final JwtTokenProvider jwtTokenProvider;
+    private final WorkService workService;
 
     @PostMapping("/works")
     private ResponseEntity<Object> createWork(@RequestBody WorkRequest.CreateWorkRequest request, HttpServletRequest httpServletRequest) throws Exception {

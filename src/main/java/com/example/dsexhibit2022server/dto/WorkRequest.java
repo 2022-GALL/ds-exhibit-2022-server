@@ -15,18 +15,19 @@ public class WorkRequest {
     public static class CreateWorkRequest{
         // 작가 관련 정보
         private String name;
-        private String major;
         private String profileImg;
         private String memberName;
 
         // 작품 관련 정보
+        private int year;
         private String title;
         private String workInfo;
         private String workImg;
         //private List<String> workDetailImg;
-        private int year;
         private LocalDate startDate;
         private LocalDate endDate;
         private String link;
+
+        private String major;
     }
 }
