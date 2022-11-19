@@ -1,11 +1,13 @@
 package com.example.dsexhibit2022server.domain;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Builder
 @Setter
 @Getter
 @AllArgsConstructor
