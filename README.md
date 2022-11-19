@@ -13,7 +13,7 @@
     - JWT
     - Hibernate Bean Validator (예정)
     - Pageable (예정)
-    - Lombok (예정)
+    - Lombok
     - JUnit 단위테스트 (예정)
 
 * 팀원 소개😀
