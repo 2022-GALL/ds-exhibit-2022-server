@@ -21,7 +21,11 @@ repositories {
 dependencies {
     //spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    //test, JUnit 5
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
+    testImplementation 'org.projectlombok:lombok:1.18.24' //use lombok too for test code
 
     //lombok
     compileOnly 'org.projectlombok:lombok'
@@ -36,6 +40,11 @@ dependencies {
     //Spring Security, JWT
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.10'
+
+
 }
 
 tasks.named('test') {

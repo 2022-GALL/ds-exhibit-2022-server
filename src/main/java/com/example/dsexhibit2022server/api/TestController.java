@@ -17,7 +17,7 @@ public class TestController {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    @GetMapping("api/test/hello")
+    @GetMapping("/api/test/hello")
     public ResponseEntity<Object> hello() {
         return ResponseEntity.ok(new JsonResponse(200, "success hello", "hello"));
     }
