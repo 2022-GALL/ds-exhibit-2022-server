@@ -47,7 +47,7 @@ public class UserService {
         User user = userOptional.get();
 
         //비밀번호 확인
-        if(!user.getPassword().equals(request.getPassword())){
+        if(!user.isPassword(request.getPassword())){
             throw new Exception(); //TODO : 403 으로 변경
         }
 
