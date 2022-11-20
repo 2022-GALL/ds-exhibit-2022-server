@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 public class WorkRequest {
 
@@ -23,7 +23,7 @@ public class WorkRequest {
         private String title;
         private String workInfo;
         private String workImg;
-        //private List<String> workDetailImg;
+        private List<String> workDetailImg;
         private LocalDate startDate;
         private LocalDate endDate;
         private String link;

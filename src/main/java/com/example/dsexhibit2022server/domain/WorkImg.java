@@ -1,15 +1,13 @@
 package com.example.dsexhibit2022server.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Table(name="work_img")
@@ -17,6 +15,7 @@ import javax.persistence.*;
 public class WorkImg {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long workImgIdx;
 
     @Column(length = 500, nullable = false)

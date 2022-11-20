@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -16,11 +17,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WorkService {
 
-    private final WorkRepository workRepository;
     private final AuthorRepository authorRepository;
     private final MajorRepository majorRepository;
     private final UserRepository userRepository;
+    private final WorkRepository workRepository;
 
+    private final WorkImgRepository workImgRepository;
     public Long createWork(WorkRequest.CreateWorkRequest request, String email) throws Exception {
         log.info("[SERVICE] work/createWork");
 
@@ -54,8 +56,18 @@ public class WorkService {
                 .department(department)
                 .user(findUser.get())
                 .build();
-
         Long workIdx = workRepository.save(newWork).getWorkIdx();
+
+        // Work Detail Img
+        List<String> imgList = request.getWorkDetailImg();
+        for(String path : imgList){
+            WorkImg newWorkImg = WorkImg.builder()
+                    .imgPath(path)
+                    .work(newWork)
+                    .build();
+            workImgRepository.save(newWorkImg);
+        }
+
         return workIdx;
     }
 
