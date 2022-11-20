@@ -31,14 +31,7 @@ public class UserService {
             throw new Exception(); //TODO : 409로 변경하기
         }
 
-        User newUser = User.builder()
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .name(request.getName())
-                .major(request.getMajor())
-                .roles(Collections.singletonList("ROLE_USER"))
-                .build();
-
+        User newUser = request.toEntity();
         return userRepository.save(newUser).getUserIdx();
     }
 

@@ -1,5 +1,6 @@
 package com.example.dsexhibit2022server.dto;
 
+import com.example.dsexhibit2022server.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,15 @@ public class UserRequest {
         private String password;
         private String name;
         private String major;
+
+        public User toEntity() {
+            return User.builder()
+                    .email(this.getEmail())
+                    .password(this.getPassword())
+                    .name(this.getName())
+                    .major(this.getMajor())
+                    .build();
+        }
     }
 
     @NoArgsConstructor
