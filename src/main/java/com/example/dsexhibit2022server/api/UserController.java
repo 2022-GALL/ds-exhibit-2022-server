@@ -29,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(new JsonResponse(201, "success sign up", userIdx));
     }
 
-    @GetMapping("/api/users/log-in")
+    @PostMapping("/api/users/log-in")
     public ResponseEntity<Object> login(@RequestBody UserRequest.LoginRequest request) throws Exception {
         log.info("[API] user/login");
 
