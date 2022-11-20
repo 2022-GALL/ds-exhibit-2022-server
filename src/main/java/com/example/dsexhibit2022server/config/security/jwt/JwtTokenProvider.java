@@ -99,6 +99,7 @@ public class JwtTokenProvider {
     public Authentication getAuthenticationByServlet(HttpServletRequest httpServletRequest) {
         String token = resolveToken(httpServletRequest);
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPK(token)); //토큰에서 회원정보 추출하는 getUserOK메서드 사용
+//        System.out.println("userDetails.getAuthorities() : "+userDetails.getAuthorities());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
