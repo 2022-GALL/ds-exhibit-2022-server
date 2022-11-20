@@ -3,6 +3,7 @@ package com.example.dsexhibit2022server.api;
 import com.example.dsexhibit2022server.application.UserService;
 import com.example.dsexhibit2022server.config.security.jwt.JwtTokenProvider;
 import com.example.dsexhibit2022server.dto.UserRequest;
+import com.example.dsexhibit2022server.dto.UserResponse;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +30,19 @@ class UserControllerTest {
 
     @MockBean
     UserService userService;
+
+    Gson gson = new Gson();
+
     @Test
     void addUser() throws Exception {
 
-        //post로 보낼 requestBody생성
+        //post로 보낼 requestBody생성 (요청dto)
         UserRequest.SignUpRequest request = new UserRequest.SignUpRequest("jh@email", "0000", "박지혜", "컴공");
-        Gson gson = new Gson();
         String requestBody = gson.toJson(request);
 
         // Mock 객체인 서비스가 할 가상 행동 정의
         given(userService.addUser(request))
                 .willReturn(1L);
-
 
         mockMvc.perform(
                 post("/api/users/sign-up")
@@ -51,10 +53,30 @@ class UserControllerTest {
                 .andDo(print());
 
         verify(userService).addUser(request);
-
     }
 
-//    @Test
-//    void login() {
-//    }
+    @Test
+    void login() throws Exception {
+
+        //요청dto
+        UserRequest.LoginRequest request = new UserRequest.LoginRequest("jh@email", "0000");
+        String requestBody = gson.toJson(request);
+
+        //응답dto
+        String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaEBlbWFpbCIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2Njg3OTUyOTUsImV4cCI6MTY2OTQwMDA5NX0.7Rk629fsSndVE-nSXwPyFJWjBL3J2OjEhUb3fB7MrNg";
+        UserResponse.LoginResponse response = new UserResponse.LoginResponse("박지혜", jwtToken);
+
+        given(userService.login(request))
+                .willReturn(response);
+
+        mockMvc.perform(
+                post("/api/users/log-in")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data.name").value("박지혜"))
+                .andExpect(jsonPath("$.data.token").value(jwtToken))
+                .andDo(print());
+
+        verify(userService).login(request);
+    }
 }
