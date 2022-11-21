@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/api/users/sign-up")
-    public ResponseEntity<Object> addUser(@RequestBody UserRequest.SignUpRequest request) throws Exception {
+    public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest.SignUpRequest request) throws Exception {
         log.info("[API] user/addUser");
 
         Long userIdx = userService.addUser(request);
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/api/users/log-in")
-    public ResponseEntity<Object> login(@RequestBody UserRequest.LoginRequest request) throws Exception {
+    public ResponseEntity<Object> login(@RequestBody @Valid UserRequest.LoginRequest request) throws Exception {
         log.info("[API] user/login");
 
         UserResponse.LoginResponse response = userService.login(request);

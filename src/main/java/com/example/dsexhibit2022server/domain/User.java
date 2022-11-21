@@ -36,6 +36,11 @@ public class User implements UserDetails {
     @Column(length = 30, nullable = false)
     private String major;
 
+    ///// -- method -- /////
+    public boolean isPassword(String password) {
+        return this.password.equals(password);
+    }
+
 
     ////////////////////////////// implements UserDetails //////////////////////////////
     @ElementCollection(fetch = FetchType.EAGER)

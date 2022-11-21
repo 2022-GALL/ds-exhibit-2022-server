@@ -1,5 +1,8 @@
 package com.example.dsexhibit2022server.application;
 
+import com.example.dsexhibit2022server.config.global.exception.RestApiException;
+import com.example.dsexhibit2022server.config.global.exception.error.AuthErrorCode;
+import com.example.dsexhibit2022server.config.global.exception.error.CommonErrorCode;
 import com.example.dsexhibit2022server.config.security.jwt.JwtTokenProvider;
 import com.example.dsexhibit2022server.dao.UserRepository;
 import com.example.dsexhibit2022server.domain.User;
@@ -28,17 +31,10 @@ public class UserService {
         //이미 가입된 유저인지 확인
         Optional<User> findUser = userRepository.findByEmail(request.getEmail());
         if(findUser.isPresent()){
-            throw new Exception(); //TODO : 409로 변경하기
+            throw new RestApiException(AuthErrorCode.ALREADY_EXIST_USER);
         }
 
-        User newUser = User.builder()
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .name(request.getName())
-                .major(request.getMajor())
-                .roles(Collections.singletonList("ROLE_USER"))
-                .build();
-
+        User newUser = request.toEntity();
         return userRepository.save(newUser).getUserIdx();
     }
 
@@ -48,14 +44,14 @@ public class UserService {
         // email로 DB 확인
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
         if(userOptional.isEmpty()){
-            throw new Exception(); //TODO : 403 으로 변경
+            throw new RestApiException(AuthErrorCode.NOT_EXIST_USER);
         }
 
         User user = userOptional.get();
 
         //비밀번호 확인
-        if(!user.getPassword().equals(request.getPassword())){
-            throw new Exception(); //TODO : 403 으로 변경
+        if(!user.isPassword(request.getPassword())){
+            throw new RestApiException(AuthErrorCode.LOGIN_FAILED);
         }
 
         String token = jwtTokenProvider.createToken(user.getEmail(), user.getRoles()); //사용자 식별용 고유값인 email과 권한단계인 role을 담은 토큰 생성

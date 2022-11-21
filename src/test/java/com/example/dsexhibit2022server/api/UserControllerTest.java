@@ -63,7 +63,7 @@ class UserControllerTest {
         String requestBody = gson.toJson(request);
 
         //응답dto
-        String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaEBlbWFpbCIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2Njg3OTUyOTUsImV4cCI6MTY2OTQwMDA5NX0.7Rk629fsSndVE-nSXwPyFJWjBL3J2OjEhUb3fB7MrNg";
+        String jwtToken = "eyJhbGciOiJIU어쩌구임시토큰값.CI6MTY2OTQwMDA5NX0.7Rk629fsOjEhUb3fB7MrNg";
         UserResponse.LoginResponse response = new UserResponse.LoginResponse("박지혜", jwtToken);
 
         given(userService.login(request))
