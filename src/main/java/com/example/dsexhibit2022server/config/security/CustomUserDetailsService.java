@@ -1,5 +1,7 @@
 package com.example.dsexhibit2022server.config.security;
 
+import com.example.dsexhibit2022server.config.global.exception.RestApiException;
+import com.example.dsexhibit2022server.config.global.exception.error.AuthErrorCode;
 import com.example.dsexhibit2022server.dao.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Member of this email is not exist. Please sign up.")); //TODO : 핸들링하기
+                .orElseThrow(() -> new RestApiException(AuthErrorCode.NOT_EXIST_USER));
     }
 }

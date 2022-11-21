@@ -11,7 +11,9 @@ public enum AuthErrorCode implements ErrorCode {
 
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "Need authorization."), //401
     GUEST_USER(HttpStatus.UNAUTHORIZED, "Request from guest user. Token is empty."), //401
+    LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "Login Failed. Please check your email and password"), //401
     NOT_EXIST_USER(HttpStatus.UNAUTHORIZED, "User of this email is not exist. Please sign up."), //401
+    ALREADY_EXIST_USER(HttpStatus.CONFLICT, "User of this email is already exist. Please login."), //409
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Token is invalid."), //401
     FORBIDDEN(HttpStatus.FORBIDDEN, "Forbidden. Insufficient permissions."), //403
     ;
