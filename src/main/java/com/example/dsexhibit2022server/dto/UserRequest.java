@@ -5,15 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 public class UserRequest {
 
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
     public static class SignUpRequest {
+        @NotBlank
         private String email;
+        @NotBlank
         private String password;
+        @NotBlank
         private String name;
+        @NotBlank
         private String major;
 
         public User toEntity() {
@@ -30,7 +36,9 @@ public class UserRequest {
     @AllArgsConstructor
     @Data
     public static class LoginRequest {
+        @NotBlank
         private String email;
+        @NotBlank
         private String password;
     }
 }
