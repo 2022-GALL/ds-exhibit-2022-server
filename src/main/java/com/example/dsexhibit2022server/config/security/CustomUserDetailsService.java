@@ -19,6 +19,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RestApiException(AuthErrorCode.NOT_EXIST_USER));
+                .orElseThrow(() -> new RestApiException(AuthErrorCode.NOT_EXIST_USER)); //TODO : 이거 왜 Handler에 안잡힐까..
     }
 }
