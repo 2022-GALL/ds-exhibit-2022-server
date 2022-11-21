@@ -3,12 +3,16 @@ package com.example.dsexhibit2022server.api;
 import com.example.dsexhibit2022server.application.UserService;
 import com.example.dsexhibit2022server.application.WorkService;
 import com.example.dsexhibit2022server.config.global.JsonResponse;
+import com.example.dsexhibit2022server.config.global.exception.CustomException;
+import com.example.dsexhibit2022server.config.global.exception.RestApiException;
+import com.example.dsexhibit2022server.config.global.exception.error.CommonErrorCode;
 import com.example.dsexhibit2022server.domain.User;
 import com.example.dsexhibit2022server.dto.UserRequest;
 import com.example.dsexhibit2022server.dto.UserResponse;
 import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +35,10 @@ public class UserController {
     @PostMapping("/api/users/sign-up")
     public ResponseEntity<Object> addUser(@RequestBody @Valid UserRequest.SignUpRequest request) {
         log.info("[API] user/addUser");
+
+        if(!request.checkEmail()){
+            throw new CustomException(HttpStatus.CONFLICT, "Email must end with '@duksung.ac.kr'");
+        }
 
         Long userIdx = userService.addUser(request);
         return ResponseEntity.ok(new JsonResponse(201, "success sign up", userIdx));
