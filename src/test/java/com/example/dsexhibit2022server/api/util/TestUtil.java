@@ -11,7 +11,7 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
 
-public class TestUtil {
+public class TestUtil { //구현 실패해서 아무데서도 안쓰는 코드임
     public static HttpServletRequest getRequest(Map<String, String[]> params) {
         return new HttpServletRequest() {
             //이 메서드만 수정함

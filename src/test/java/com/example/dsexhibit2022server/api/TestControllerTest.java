@@ -1,6 +1,7 @@
 package com.example.dsexhibit2022server.api;
 
 import com.example.dsexhibit2022server.api.util.TestUtil;
+import com.example.dsexhibit2022server.config.security.WebSecurityConfig;
 import com.example.dsexhibit2022server.config.security.jwt.JwtAuthenticationFilter;
 import com.example.dsexhibit2022server.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +13,14 @@ import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -42,7 +46,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@RequiredArgsConstructor
-@WebMvcTest(TestController.class)
+@WebMvcTest(controllers = TestController.class,
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {WebSecurityConfig.class})})
+
+//        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {WebSecurityConfig.class, JwtAuthenticationFilter.class})})
 class TestControllerTest {
 
     @Autowired
@@ -62,6 +69,33 @@ class TestControllerTest {
 
 //        verify()
     }
+
+////가장 베이직한 것만 남긴 코드
+/*
+
+    @Test
+//    @WithMockUser
+    void checkTokenInfo() throws Exception {
+        String jwtToken = "eyJhbGciOi어쩌구 토큰값.VzIjpbA5NX0.7Rk629fsSnUb3fB7MrNg";
+        String email = "jh@email";
+        MockHttpServletRequest servletRequest = new MockHttpServletRequest();
+        servletRequest.addHeader("X-AUTH-TOKEN", jwtToken);
+
+        given(jwtTokenProvider.getUserPKByServlet(servletRequest)).willReturn(
+                email
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/test/token-info")
+                        .header("X-AUTH-TOKEN", jwtToken)) //.session(session)
+                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.data").value(email))  //왜 null일까....
+                .andDo(print());
+
+        verify(jwtTokenProvider).getUserPKByServlet(servletRequest);
+
+    }
+*/
+
 
 
 /*
