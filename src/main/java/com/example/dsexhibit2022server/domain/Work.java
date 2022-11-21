@@ -71,4 +71,12 @@ public class Work {
                 .title(this.title)
                 .build();
     }
+
+    public WorkResponse.WorkThumbnailResponse toThumbnailResponse() {
+        return WorkResponse.WorkThumbnailResponse.builder()
+                .workImg(this.workImg)
+                .title(this.title)
+                .authorName(this.author.getName())
+                .build();
+    }
 }

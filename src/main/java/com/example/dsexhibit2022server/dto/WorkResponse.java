@@ -15,4 +15,14 @@ public class WorkResponse {
         private String workImg;
         private String title;
     }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public static class WorkThumbnailResponse {
+        private String workImg;
+        private String title;
+        private String authorName;
+    }
 }

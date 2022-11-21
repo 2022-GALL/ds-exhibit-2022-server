@@ -8,6 +8,7 @@ import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -92,4 +93,11 @@ public class WorkService {
         List<Work> workList = workRepository.findWorkByUser(user);
         return workList.stream().map( work -> work.toSimpleResponse() ).collect(Collectors.toList());
     }
+
+    public List<WorkResponse.WorkThumbnailResponse> getWorkList(Department department, Major major, int year, Pageable pageable) {
+
+        List<Work> workList = workRepository.findWorkByDepartmentAndMajorAndYear(department, major, year, pageable);
+        return workList.stream().map(work -> work.toThumbnailResponse()).collect(Collectors.toList());
+    }
+
 }
