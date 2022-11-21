@@ -71,4 +71,16 @@ public class WorkService {
         return workIdx;
     }
 
+    public void deleteWork(Long workIdx) {
+        log.info("[SERVICE] work/deleteWork");
+
+        // work detail images 삭제
+        List<Long> workImgList = workImgRepository.findWork(workIdx);
+        for(Long workImgIdx : workImgList){
+            workImgRepository.deleteById(workImgIdx);
+        }
+
+        // work 삭제
+        workRepository.deleteById(workIdx);
+    }
 }

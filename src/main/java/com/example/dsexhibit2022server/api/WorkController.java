@@ -16,13 +16,13 @@ import java.time.LocalDate;
 
 @Slf4j
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/works")
 @RequiredArgsConstructor
 public class WorkController {
     private final JwtTokenProvider jwtTokenProvider;
     private final WorkService workService;
 
-    @PostMapping("/works")
+    @PostMapping("")
     private ResponseEntity<Object> createWork(@RequestBody WorkRequest.CreateWorkRequest request, HttpServletRequest httpServletRequest) throws Exception {
         log.info("[API] work/createWork");
 
@@ -30,6 +30,15 @@ public class WorkController {
         Long workIdx = workService.createWork(request, email);
 
         return ResponseEntity.ok(new JsonResponse(300, "success create work", workIdx));
+    }
+
+    @DeleteMapping("/{workIdx}")
+    private ResponseEntity<Object> deleteWork(@PathVariable("workIdx") Long workIdx, HttpServletRequest httpServletRequest) throws Exception {
+        log.info("[API] work/deleteWork");
+
+        workService.deleteWork(workIdx);
+
+        return ResponseEntity.ok(new JsonResponse(303, "success delete work", null));
     }
 
 }
