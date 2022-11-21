@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 public class UserRequest {
 
@@ -14,9 +16,13 @@ public class UserRequest {
     @Data
     public static class SignUpRequest {
         @NotBlank
+        @Email
         private String email;
+
         @NotBlank
+        @Size(min = 6, max = 30)
         private String password;
+
         @NotBlank
         private String name;
         @NotBlank
@@ -30,6 +36,13 @@ public class UserRequest {
                     .major(this.getMajor())
                     .build();
         }
+
+        //// -- method -- ////
+        public boolean checkEmail(){
+            int domainIndex = this.email.indexOf("@");
+            String domain = this.email.substring(domainIndex + 1);
+            return domain.equals("duksung.ac.kr");
+        }
     }
 
     @NoArgsConstructor
@@ -37,8 +50,11 @@ public class UserRequest {
     @Data
     public static class LoginRequest {
         @NotBlank
+        @Email
         private String email;
+
         @NotBlank
+        @Size(min = 6, max = 30)
         private String password;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.dsexhibit2022server.domain;
 
+import com.example.dsexhibit2022server.dto.UserResponse;
+import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,6 +37,16 @@ public class User implements UserDetails {
 
     @Column(length = 30, nullable = false)
     private String major;
+
+    ///// -- to dto -- /////
+    public UserResponse.MyInfoResponse toMyInfoResponse(List<WorkResponse.WorkSimpleResponse> workList) {
+        return UserResponse.MyInfoResponse.builder()
+                .email(getEmail())
+                .name(getName())
+                .major(getMajor())
+                .workList(workList)
+                .build();
+    }
 
     ///// -- method -- /////
     public boolean isPassword(String password) {

@@ -8,12 +8,14 @@ import com.example.dsexhibit2022server.dao.UserRepository;
 import com.example.dsexhibit2022server.domain.User;
 import com.example.dsexhibit2022server.dto.UserRequest;
 import com.example.dsexhibit2022server.dto.UserResponse;
+import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -25,7 +27,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Long addUser(UserRequest.SignUpRequest request) throws Exception {
+    public Long addUser(UserRequest.SignUpRequest request) {
         log.info("[SERVICE] addUser");
 
         //이미 가입된 유저인지 확인
@@ -38,7 +40,7 @@ public class UserService {
         return userRepository.save(newUser).getUserIdx();
     }
 
-    public UserResponse.LoginResponse login(UserRequest.LoginRequest request) throws Exception {
+    public UserResponse.LoginResponse login(UserRequest.LoginRequest request) {
         log.info("[SERVICE] login");
 
         // email로 DB 확인
@@ -59,5 +61,24 @@ public class UserService {
                 .name(user.getName())
                 .token(token)
                 .build();
+    }
+
+    public UserResponse.MyInfoResponse getMyInfo(User user, List<WorkResponse.WorkSimpleResponse> workList) {
+        log.info("[SERVICE] getMyInfo");
+        return user.toMyInfoResponse(workList);
+    }
+
+
+
+    //////// -- method -- ///////
+    public User getUserByServlet(HttpServletRequest servletRequest) {
+        String email = jwtTokenProvider.getUserPKByServlet(servletRequest);
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if(userOptional.isEmpty()){
+            throw new RestApiException(AuthErrorCode.NOT_EXIST_USER);
+        }
+
+        return userOptional.get();
     }
 }

@@ -1,18 +1,26 @@
 package com.example.dsexhibit2022server.api;
 
 
+import com.example.dsexhibit2022server.application.DepartmentService;
+import com.example.dsexhibit2022server.application.MajorService;
 import com.example.dsexhibit2022server.application.WorkService;
 import com.example.dsexhibit2022server.config.global.JsonResponse;
 import com.example.dsexhibit2022server.config.security.jwt.JwtTokenProvider;
+import com.example.dsexhibit2022server.domain.Department;
+import com.example.dsexhibit2022server.domain.Major;
 import com.example.dsexhibit2022server.dto.WorkRequest;
+import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -21,6 +29,10 @@ import java.time.LocalDate;
 public class WorkController {
     private final JwtTokenProvider jwtTokenProvider;
     private final WorkService workService;
+
+    private final DepartmentService departmentService;
+
+    private final MajorService majorService;
 
     @PostMapping("")
     private ResponseEntity<Object> createWork(@RequestBody WorkRequest.CreateWorkRequest request, HttpServletRequest httpServletRequest) throws Exception {
@@ -41,4 +53,19 @@ public class WorkController {
         return ResponseEntity.ok(new JsonResponse(303, "success delete work", null));
     }
 
+    @GetMapping("")
+    public ResponseEntity<Object> getWorkList(@RequestParam String department,
+                                              @RequestParam String major,
+                                              @RequestParam int year,
+                                              @RequestParam int page) {
+        log.info("[API] work/getWorkList");
+
+        Department departmentEntity = departmentService.getDepartmentByCode(department);
+        Major majorEntity = majorService.getMajorByCode(major);
+
+        PageRequest pageRequest = PageRequest.of(page, 20);
+
+        List<WorkResponse.WorkThumbnailResponse> response = workService.getWorkList(departmentEntity, majorEntity, year, pageRequest);
+        return ResponseEntity.ok(new JsonResponse(200, "success get work list", response));
+    }
 }

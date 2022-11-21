@@ -4,13 +4,16 @@ import com.example.dsexhibit2022server.config.global.JsonResponse;
 import com.example.dsexhibit2022server.dao.*;
 import com.example.dsexhibit2022server.domain.*;
 import com.example.dsexhibit2022server.dto.WorkRequest;
+import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -83,4 +86,18 @@ public class WorkService {
         // work 삭제
         workRepository.deleteById(workIdx);
     }
+
+    public List<WorkResponse.WorkSimpleResponse> getMyWorkList(User user) {
+        log.info("[SERVICE] getMyWorkList");
+
+        List<Work> workList = workRepository.findWorkByUser(user);
+        return workList.stream().map( work -> work.toSimpleResponse() ).collect(Collectors.toList());
+    }
+
+    public List<WorkResponse.WorkThumbnailResponse> getWorkList(Department department, Major major, int year, Pageable pageable) {
+
+        List<Work> workList = workRepository.findWorkByDepartmentAndMajorAndYear(department, major, year, pageable);
+        return workList.stream().map(work -> work.toThumbnailResponse()).collect(Collectors.toList());
+    }
+
 }

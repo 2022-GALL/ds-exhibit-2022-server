@@ -1,5 +1,6 @@
 package com.example.dsexhibit2022server.domain;
 
+import com.example.dsexhibit2022server.dto.WorkResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -59,4 +60,23 @@ public class Work {
     @JoinColumn(name = "author_idx", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Author author;
+
+
+
+
+    /////// -- to dto -- ///////
+    public WorkResponse.WorkSimpleResponse toSimpleResponse() {
+        return WorkResponse.WorkSimpleResponse.builder()
+                .workImg(this.workImg)
+                .title(this.title)
+                .build();
+    }
+
+    public WorkResponse.WorkThumbnailResponse toThumbnailResponse() {
+        return WorkResponse.WorkThumbnailResponse.builder()
+                .workImg(this.workImg)
+                .title(this.title)
+                .authorName(this.author.getName())
+                .build();
+    }
 }
