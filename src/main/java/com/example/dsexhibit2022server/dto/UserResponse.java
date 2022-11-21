@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class UserResponse {
 
     @Builder
@@ -14,6 +16,17 @@ public class UserResponse {
     public static class LoginResponse {
         private String name;
         private String token;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public static class MyInfoResponse {
+        private String email;
+        private String name;
+        private String major;
+        private List<WorkResponse.WorkSimpleResponse> workList;
     }
 
 }
