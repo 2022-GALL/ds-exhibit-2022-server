@@ -1,13 +1,10 @@
 package com.example.dsexhibit2022server.api;
 
 
-import com.example.dsexhibit2022server.application.DepartmentService;
-import com.example.dsexhibit2022server.application.MajorService;
-import com.example.dsexhibit2022server.application.WorkService;
+import com.example.dsexhibit2022server.application.*;
 import com.example.dsexhibit2022server.config.global.JsonResponse;
 import com.example.dsexhibit2022server.config.security.jwt.JwtTokenProvider;
-import com.example.dsexhibit2022server.domain.Department;
-import com.example.dsexhibit2022server.domain.Major;
+import com.example.dsexhibit2022server.domain.*;
 import com.example.dsexhibit2022server.dto.WorkRequest;
 import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -29,9 +27,8 @@ import java.util.List;
 public class WorkController {
     private final JwtTokenProvider jwtTokenProvider;
     private final WorkService workService;
-
+    private final WorkImgService workImgService;
     private final DepartmentService departmentService;
-
     private final MajorService majorService;
 
     @PostMapping("")
@@ -43,6 +40,23 @@ public class WorkController {
 
         return ResponseEntity.ok(new JsonResponse(300, "success create work", workIdx));
     }
+
+    @GetMapping("/{workIdx}")
+    private ResponseEntity<Object> getWork(@PathVariable("workIdx") Long workIdx){
+        log.info("[API] work/getWork");
+
+        //Work work = workService.findWork(workIdx);
+        //String majorName = workService.getMajorByIdx(workIdx).getName();
+        //String majorName = work.getMajor().getName();
+        //Author author = authorService.getAuthorByIdx(workIdx);
+        //Author author = work.getAuthor();
+        List<String> imgPathList = workImgService.getImgPathListByIdx(workIdx);
+
+        WorkResponse.WorkDetailResponse response = workService.getWork(workIdx,imgPathList);
+
+        return ResponseEntity.ok(new JsonResponse(301, "success get detail info of work", response));
+    }
+
 
     @DeleteMapping("/{workIdx}")
     private ResponseEntity<Object> deleteWork(@PathVariable("workIdx") Long workIdx, HttpServletRequest httpServletRequest) throws Exception {

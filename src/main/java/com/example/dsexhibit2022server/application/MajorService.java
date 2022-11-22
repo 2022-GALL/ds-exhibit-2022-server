@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -21,5 +20,9 @@ public class MajorService {
     public Major getMajorByCode(String code) {
         return majorRepository.findOptionalByCode(code)
                 .orElseThrow(() -> new CustomException(HttpStatus.CONFLICT, "This major code is not exist"));
+    }
+
+    public String getNameByIdx(Long majorIdx){
+        return majorRepository.findById(majorIdx).get().getName();
     }
 }

@@ -1,13 +1,11 @@
 package com.example.dsexhibit2022server.application;
 
-import com.example.dsexhibit2022server.config.global.JsonResponse;
 import com.example.dsexhibit2022server.dao.*;
 import com.example.dsexhibit2022server.domain.*;
 import com.example.dsexhibit2022server.dto.WorkRequest;
 import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -74,11 +72,37 @@ public class WorkService {
         return workIdx;
     }
 
+    //public Work findWork(Long workIdx){ return workRepository.findById(workIdx).get();}
+
+    public WorkResponse.WorkDetailResponse getWork(Long workIdx, List<String> detailImgList) {
+        log.info("[SERVICE] work/getWork");
+
+        Work work = workRepository.findById(workIdx).get();
+        Author author = work.getAuthor();
+        String majorName = work.getMajor().getName();
+
+        WorkResponse.WorkDetailResponse result=WorkResponse.WorkDetailResponse.builder()
+                .name(author.getName())
+                .profileImg(author.getProfileImg())
+                .memberName(author.getMemberName())
+                .major(majorName)
+                .title(work.getTitle())
+                .workInfo(work.getWorkInfo())
+                .workImg(work.getWorkImg())
+                .workDetailImg(detailImgList)
+                .year(work.getYear())
+                .startDate(work.getStartDate())
+                .endDate(work.getEndDate())
+                .link(work.getLink())
+                .build();
+        return result;
+    }
+
     public void deleteWork(Long workIdx) {
         log.info("[SERVICE] work/deleteWork");
 
         // work detail images 삭제
-        List<Long> workImgList = workImgRepository.findWork(workIdx);
+        List<Long> workImgList = workImgRepository.findWorkImg(workIdx);
         for(Long workImgIdx : workImgList){
             workImgRepository.deleteById(workImgIdx);
         }
@@ -99,5 +123,6 @@ public class WorkService {
         List<Work> workList = workRepository.findWorkByDepartmentAndMajorAndYear(department, major, year, pageable);
         return workList.stream().map(work -> work.toThumbnailResponse()).collect(Collectors.toList());
     }
+
 
 }
