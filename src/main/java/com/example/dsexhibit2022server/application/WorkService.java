@@ -17,62 +17,29 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class WorkService {
-
-    private final AuthorRepository authorRepository;
-    private final MajorRepository majorRepository;
-    private final UserRepository userRepository;
     private final WorkRepository workRepository;
 
-    private final WorkImgRepository workImgRepository;
-    public Long createWork(WorkRequest.CreateWorkRequest request, String email) throws Exception {
+    public Work createWork(WorkRequest.CreateWorkRequest req,
+                           User user, Author newAuthor, Major major) throws Exception {
         log.info("[SERVICE] work/createWork");
 
-        // Author
-        Author newAuthor = Author.builder()
-                .name(request.getName())
-                .profileImg(request.getProfileImg())
-                .memberName(request.getMemberName())
-                .build();
-        authorRepository.save(newAuthor);
-
-        // Major, Department
-        String majorCode = request.getMajor();
-        Major major = majorRepository.findByCode(majorCode);
-        Department department = major.getDepartment();
-
-        // User
-        Optional<User> findUser = userRepository.findByEmail(email);
-
-        // Work
         Work newWork = Work.builder()
-                .title(request.getTitle())
-                .workInfo(request.getWorkInfo())
-                .workImg(request.getWorkImg())
-                .year(request.getYear())
-                .startDate(request.getStartDate())
-                .endDate(request.getEndDate())
-                .link(request.getLink())
+                .title(req.getTitle())
+                .workInfo(req.getWorkInfo())
+                .workImg(req.getWorkImg())
+                .year(req.getYear())
+                .startDate(req.getStartDate())
+                .endDate(req.getEndDate())
+                .link(req.getLink())
                 .author(newAuthor)
                 .major(major)
-                .department(department)
-                .user(findUser.get())
+                .department(major.getDepartment())
+                .user(user)
                 .build();
-        Long workIdx = workRepository.save(newWork).getWorkIdx();
 
-        // Work Detail Img
-        List<String> imgList = request.getWorkDetailImg();
-        for(String path : imgList){
-            WorkImg newWorkImg = WorkImg.builder()
-                    .imgPath(path)
-                    .work(newWork)
-                    .build();
-            workImgRepository.save(newWorkImg);
-        }
-
-        return workIdx;
+        return newWork;
     }
 
-    //public Work findWork(Long workIdx){ return workRepository.findById(workIdx).get();}
 
     public WorkResponse.WorkDetailResponse getWork(Long workIdx, List<String> detailImgList) {
         log.info("[SERVICE] work/getWork");
@@ -101,13 +68,6 @@ public class WorkService {
     public void deleteWork(Long workIdx) {
         log.info("[SERVICE] work/deleteWork");
 
-        // work detail images 삭제
-        List<Long> workImgList = workImgRepository.findWorkImg(workIdx);
-        for(Long workImgIdx : workImgList){
-            workImgRepository.deleteById(workImgIdx);
-        }
-
-        // work 삭제
         workRepository.deleteById(workIdx);
     }
 

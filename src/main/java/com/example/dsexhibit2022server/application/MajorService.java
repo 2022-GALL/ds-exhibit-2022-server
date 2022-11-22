@@ -22,7 +22,4 @@ public class MajorService {
                 .orElseThrow(() -> new CustomException(HttpStatus.CONFLICT, "This major code is not exist"));
     }
 
-    public String getNameByIdx(Long majorIdx){
-        return majorRepository.findById(majorIdx).get().getName();
-    }
 }
