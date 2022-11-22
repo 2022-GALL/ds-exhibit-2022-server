@@ -23,4 +23,8 @@ public class AuthorService {
         return newAuthor;
     }
 
+    public void deleteAuthor(Author findAuthor){
+        authorRepository.deleteById(findAuthor.getAuthorIdx());
+    }
+
 }

@@ -59,7 +59,11 @@ public class WorkController {
         log.info("[API] work/deleteWork");
 
         workImgService.deleteWorkImg(workIdx);
+
         workService.deleteWork(workIdx);
+
+        Author findAuthor = workService.getAuthorByWork(workIdx);
+        authorService.deleteAuthor(findAuthor);
 
         return ResponseEntity.ok(new JsonResponse(303, "success delete work", null));
     }

@@ -85,4 +85,7 @@ public class WorkService {
     }
 
 
+    public Author getAuthorByWork(Long workIdx) {
+        return workRepository.findById(workIdx).get().getAuthor();
+    }
 }
