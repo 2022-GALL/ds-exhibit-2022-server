@@ -24,7 +24,7 @@ public class AuthorService {
     }
 
     public void deleteAuthor(Author findAuthor){
-        authorRepository.deleteById(findAuthor.getAuthorIdx());
+        authorRepository.delete(findAuthor);
     }
 
 }

@@ -60,9 +60,8 @@ public class WorkController {
 
         workImgService.deleteWorkImg(workIdx);
 
-        workService.deleteWork(workIdx);
-
         Author findAuthor = workService.getAuthorByWork(workIdx);
+        workService.deleteWork(workIdx);
         authorService.deleteAuthor(findAuthor);
 
         return ResponseEntity.ok(new JsonResponse(303, "success delete work", null));

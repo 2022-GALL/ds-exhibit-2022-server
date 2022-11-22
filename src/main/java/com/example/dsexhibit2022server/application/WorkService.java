@@ -37,6 +37,8 @@ public class WorkService {
                 .user(user)
                 .build();
 
+        workRepository.save(newWork);
+
         return newWork;
     }
 
@@ -84,8 +86,12 @@ public class WorkService {
         return workList.stream().map(work -> work.toThumbnailResponse()).collect(Collectors.toList());
     }
 
-
     public Author getAuthorByWork(Long workIdx) {
-        return workRepository.findById(workIdx).get().getAuthor();
+        Optional<Work> findWork = workRepository.findById(workIdx);
+        if(findWork.isEmpty()){
+            System.out.println("해당 작품을 찾을 수 없습니다.");
+            return null;
+        }
+        return findWork.get().getAuthor();
     }
 }
