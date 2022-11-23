@@ -54,11 +54,6 @@ public class WorkResponse {
         private LocalDate endDate;
         private String link;
 
-        //private Work work;
-        //private Author author;
-        //private List<String> detailImg;
-        //private String majorName;
-
     }
 
 }
