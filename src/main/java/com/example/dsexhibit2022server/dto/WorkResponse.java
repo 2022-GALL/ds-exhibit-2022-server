@@ -42,6 +42,7 @@ public class WorkResponse {
         private String name;
         private String profileImg;
         private String memberName;
+        private String email;
 
         // 작품 관련 정보
         private String major;

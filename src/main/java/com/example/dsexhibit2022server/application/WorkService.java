@@ -1,17 +1,23 @@
 package com.example.dsexhibit2022server.application;
 
+import com.example.dsexhibit2022server.config.global.exception.CustomException;
+import com.example.dsexhibit2022server.config.global.exception.RestApiException;
 import com.example.dsexhibit2022server.dao.*;
 import com.example.dsexhibit2022server.domain.*;
 import com.example.dsexhibit2022server.dto.WorkRequest;
 import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.example.dsexhibit2022server.config.global.exception.error.WorkErrorCode.*;
 
 @Slf4j
 @Service
@@ -22,6 +28,14 @@ public class WorkService {
     public Work createWork(WorkRequest.CreateWorkRequest req,
                            User user, Author newAuthor, Major major) throws Exception {
         log.info("[SERVICE] work/createWork");
+
+        // 작품 생성 시 필수값 확인
+        if(req.getTitle()==null) { throw new RestApiException(POST_WORK_EMPTY_TITLE); }
+        if(req.getWorkInfo()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_INFO); }
+        if(req.getWorkImg()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_IMG); }
+        if(req.getWorkDetailImg()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_DETAIL_IMG); }
+        if(req.getMajor()==null) { throw new RestApiException(POST_WORK_EMPTY_MAJOR); }
+        if(req.getYear()==0) { throw new RestApiException(POST_WORK_EMPTY_YEAR); }
 
         Work newWork = Work.builder()
                 .title(req.getTitle())
@@ -36,17 +50,20 @@ public class WorkService {
                 .department(major.getDepartment())
                 .user(user)
                 .build();
-
         workRepository.save(newWork);
-
         return newWork;
     }
 
 
-    public WorkResponse.WorkDetailResponse getWork(Long workIdx, List<String> detailImgList) {
+    public WorkResponse.WorkDetailResponse getWork(Work work, List<String> detailImgList) {
         log.info("[SERVICE] work/getWork");
 
-        Work work = workRepository.findById(workIdx).get();
+        //Optional<Work> work = workRepository.findById(workIdx);
+        //if(work.isEmpty()){
+        //    throw new RestApiException(NOT_EXISTS_WORK);
+        //}
+
+        //Work work = findWork(workIdx);
         Author author = work.getAuthor();
         String majorName = work.getMajor().getName();
 
@@ -89,9 +106,16 @@ public class WorkService {
     public Author getAuthorByWork(Long workIdx) {
         Optional<Work> findWork = workRepository.findById(workIdx);
         if(findWork.isEmpty()){
-            System.out.println("해당 작품을 찾을 수 없습니다.");
-            return null;
+            throw new RestApiException(NOT_EXISTS_WORK);
         }
         return findWork.get().getAuthor();
+    }
+
+    public Work findWork(Long workIdx){
+        Optional<Work> findWork = workRepository.findById(workIdx);
+        if(findWork.isEmpty()){
+            throw new RestApiException(NOT_EXISTS_WORK);
+        }
+        return findWork.get();
     }
 }

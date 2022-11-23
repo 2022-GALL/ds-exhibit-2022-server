@@ -40,17 +40,18 @@ public class WorkController {
         Work newWork = workService.createWork(request, user, newAuthor, major);
         workImgService.createWorkImg(request, newWork);
 
-        return ResponseEntity.ok(new JsonResponse(300, "success create work", newWork.getWorkIdx()));
+        return ResponseEntity.ok(new JsonResponse(200, "success create work", newWork.getWorkIdx()));
     }
 
     @GetMapping("/{workIdx}")
     public ResponseEntity<Object> getWork(@PathVariable("workIdx") Long workIdx){
         log.info("[API] work/getWork");
 
+        Work findWork = workService.findWork(workIdx);
         List<String> imgPathList = workImgService.getImgPathListByIdx(workIdx);
-        WorkResponse.WorkDetailResponse response = workService.getWork(workIdx,imgPathList);
+        WorkResponse.WorkDetailResponse response = workService.getWork(findWork,imgPathList);
 
-        return ResponseEntity.ok(new JsonResponse(301, "success get detail info of work", response));
+        return ResponseEntity.ok(new JsonResponse(200, "success get detail info of work", response));
     }
 
 
@@ -58,13 +59,15 @@ public class WorkController {
     public ResponseEntity<Object> deleteWork(@PathVariable("workIdx") Long workIdx) throws Exception {
         log.info("[API] work/deleteWork");
 
-        workImgService.deleteWorkImg(workIdx);
+        Work findWork = workService.findWork(workIdx);
 
-        Author findAuthor = workService.getAuthorByWork(workIdx);
+        workImgService.deleteWorkImg(workIdx);
+        //Author findAuthor = workService.getAuthorByWork(workIdx);
+        Author findAuthor = findWork.getAuthor();
         workService.deleteWork(workIdx);
         authorService.deleteAuthor(findAuthor);
 
-        return ResponseEntity.ok(new JsonResponse(303, "success delete work", null));
+        return ResponseEntity.ok(new JsonResponse(200, "success delete work", null));
     }
 
     @GetMapping("")
