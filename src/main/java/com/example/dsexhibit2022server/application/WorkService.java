@@ -46,6 +46,13 @@ public class WorkService {
         return newWork;
     }
 
+    public Work findWork(Long workIdx){
+        Optional<Work> findWork = workRepository.findById(workIdx);
+        if(findWork.isEmpty()){
+            throw new RestApiException(NOT_EXISTS_WORK);
+        }
+        return findWork.get();
+    }
 
     public WorkResponse.WorkDetailResponse getWork(Work work, List<String> detailImgList) {
         log.info("[SERVICE] work/getWork");
@@ -96,19 +103,4 @@ public class WorkService {
         return workList.stream().map(work -> work.toThumbnailResponse()).collect(Collectors.toList());
     }
 
-    public Author getAuthorByWork(Long workIdx) {
-        Optional<Work> findWork = workRepository.findById(workIdx);
-        if(findWork.isEmpty()){
-            throw new RestApiException(NOT_EXISTS_WORK);
-        }
-        return findWork.get().getAuthor();
-    }
-
-    public Work findWork(Long workIdx){
-        Optional<Work> findWork = workRepository.findById(workIdx);
-        if(findWork.isEmpty()){
-            throw new RestApiException(NOT_EXISTS_WORK);
-        }
-        return findWork.get();
-    }
 }
