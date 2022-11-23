@@ -11,8 +11,8 @@
     그 외 
     - JPA
     - JWT
-    - Hibernate Bean Validator (예정)
-    - Pageable (예정)
+    - Hibernate Bean Validator
+    - Pageable
     - Lombok
     - JUnit 단위테스트
 
