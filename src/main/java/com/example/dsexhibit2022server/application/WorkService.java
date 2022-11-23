@@ -65,16 +65,17 @@ public class WorkService {
 
         //Work work = findWork(workIdx);
         Author author = work.getAuthor();
+        User user = work.getUser();
         String majorName = work.getMajor().getName();
 
         WorkResponse.WorkDetailResponse result=WorkResponse.WorkDetailResponse.builder()
                 .name(author.getName())
                 .profileImg(author.getProfileImg())
                 .memberName(author.getMemberName())
+                .email(user.getEmail())
                 .major(majorName)
                 .title(work.getTitle())
                 .workInfo(work.getWorkInfo())
-                .workImg(work.getWorkImg())
                 .workDetailImg(detailImgList)
                 .year(work.getYear())
                 .startDate(work.getStartDate())

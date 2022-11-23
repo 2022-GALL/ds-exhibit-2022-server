@@ -48,7 +48,6 @@ public class WorkResponse {
         private String major;
         private String title;
         private String workInfo;
-        private String workImg;
         private List<String> workDetailImg;
         private int year;
         private LocalDate startDate;
