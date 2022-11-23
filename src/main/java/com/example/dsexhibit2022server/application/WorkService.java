@@ -29,14 +29,6 @@ public class WorkService {
                            User user, Author newAuthor, Major major) throws Exception {
         log.info("[SERVICE] work/createWork");
 
-        // 작품 생성 시 필수값 확인
-        if(req.getTitle()==null) { throw new RestApiException(POST_WORK_EMPTY_TITLE); }
-        if(req.getWorkInfo()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_INFO); }
-        if(req.getWorkImg()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_IMG); }
-        if(req.getWorkDetailImg()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_DETAIL_IMG); }
-        if(req.getMajor()==null) { throw new RestApiException(POST_WORK_EMPTY_MAJOR); }
-        if(req.getYear()==0) { throw new RestApiException(POST_WORK_EMPTY_YEAR); }
-
         Work newWork = Work.builder()
                 .title(req.getTitle())
                 .workInfo(req.getWorkInfo())

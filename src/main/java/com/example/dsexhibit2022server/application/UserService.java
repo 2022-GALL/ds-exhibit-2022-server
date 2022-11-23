@@ -81,4 +81,10 @@ public class UserService {
 
         return userOptional.get();
     }
+
+    public void checkTokenValidation(HttpServletRequest servletRequest){
+        if(!jwtTokenProvider.validateTokenByServlet(servletRequest)){
+            throw new RestApiException(AuthErrorCode.INVALID_TOKEN);
+        }
+    }
 }

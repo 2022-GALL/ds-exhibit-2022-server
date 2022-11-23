@@ -17,13 +17,6 @@ public class AuthorService {
     public final AuthorRepository authorRepository;
 
     public Author createAuthor(WorkRequest.CreateWorkRequest req){
-        // 작가 생성 시 필수값 확인
-        if(req.getName() == null){
-            throw new RestApiException(POST_WORK_EMPTY_NAME);
-        }
-        if(req.getProfileImg() == null){
-            throw new RestApiException(POST_WORK_EMPTY_PROFILE_IMG);
-        }
 
         Author newAuthor = Author.builder()
                 .name(req.getName())

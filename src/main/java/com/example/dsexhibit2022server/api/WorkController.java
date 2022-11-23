@@ -3,6 +3,8 @@ package com.example.dsexhibit2022server.api;
 
 import com.example.dsexhibit2022server.application.*;
 import com.example.dsexhibit2022server.config.global.JsonResponse;
+import com.example.dsexhibit2022server.config.global.exception.RestApiException;
+import com.example.dsexhibit2022server.config.security.jwt.JwtTokenProvider;
 import com.example.dsexhibit2022server.domain.*;
 import com.example.dsexhibit2022server.dto.WorkRequest;
 import com.example.dsexhibit2022server.dto.WorkResponse;
@@ -18,6 +20,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.dsexhibit2022server.config.global.exception.error.WorkErrorCode.*;
+import static com.example.dsexhibit2022server.config.global.exception.error.WorkErrorCode.POST_WORK_EMPTY_YEAR;
+
 @Slf4j
 @RestController
 @RequestMapping("api/works")
@@ -31,14 +36,17 @@ public class WorkController {
     private final AuthorService authorService;
 
     @PostMapping("")
-    public ResponseEntity<Object> createWork(@RequestBody WorkRequest.CreateWorkRequest request, HttpServletRequest httpServletRequest) throws Exception {
+    public ResponseEntity<Object> createWork(@RequestBody WorkRequest.CreateWorkRequest req, HttpServletRequest httpServletRequest) throws Exception {
         log.info("[API] work/createWork");
 
+        userService.checkTokenValidation(httpServletRequest);
+        checkValue(req);
+
         User user = userService.getUserByServlet(httpServletRequest);
-        Author newAuthor = authorService.createAuthor(request);
-        Major major = majorService.getMajorByCode(request.getMajor());
-        Work newWork = workService.createWork(request, user, newAuthor, major);
-        workImgService.createWorkImg(request, newWork);
+        Author newAuthor = authorService.createAuthor(req);
+        Major major = majorService.getMajorByCode(req.getMajor());
+        Work newWork = workService.createWork(req, user, newAuthor, major);
+        workImgService.createWorkImg(req, newWork);
 
         return ResponseEntity.ok(new JsonResponse(200, "success create work", newWork.getWorkIdx()));
     }
@@ -56,8 +64,10 @@ public class WorkController {
 
 
     @DeleteMapping("/{workIdx}")
-    public ResponseEntity<Object> deleteWork(@PathVariable("workIdx") Long workIdx) throws Exception {
+    public ResponseEntity<Object> deleteWork(@PathVariable("workIdx") Long workIdx, HttpServletRequest httpServletRequest) throws Exception {
         log.info("[API] work/deleteWork");
+
+        userService.checkTokenValidation(httpServletRequest);
 
         Work findWork = workService.findWork(workIdx);
 
@@ -84,5 +94,25 @@ public class WorkController {
 
         List<WorkResponse.WorkThumbnailResponse> response = workService.getWorkList(departmentEntity, majorEntity, year, pageRequest);
         return ResponseEntity.ok(new JsonResponse(200, "success get work list", response));
+    }
+
+    // 작품 생성 시 필수값 확인
+    public void checkValue(@RequestBody WorkRequest.CreateWorkRequest req){
+
+        // Work
+        if(req.getTitle()==null) { throw new RestApiException(POST_WORK_EMPTY_TITLE); }
+        if(req.getWorkInfo()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_INFO); }
+        if(req.getWorkImg()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_IMG); }
+        if(req.getWorkDetailImg()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_DETAIL_IMG); }
+        if(req.getMajor()==null) { throw new RestApiException(POST_WORK_EMPTY_MAJOR); }
+        if(req.getYear()==0) { throw new RestApiException(POST_WORK_EMPTY_YEAR); }
+
+        // Author
+        if(req.getName() == null){
+            throw new RestApiException(POST_WORK_EMPTY_NAME);
+        }
+        if(req.getProfileImg() == null){
+            throw new RestApiException(POST_WORK_EMPTY_PROFILE_IMG);
+        }
     }
 }
