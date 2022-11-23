@@ -57,12 +57,6 @@ public class WorkService {
     public WorkResponse.WorkDetailResponse getWork(Work work, List<String> detailImgList) {
         log.info("[SERVICE] work/getWork");
 
-        //Optional<Work> work = workRepository.findById(workIdx);
-        //if(work.isEmpty()){
-        //    throw new RestApiException(NOT_EXISTS_WORK);
-        //}
-
-        //Work work = findWork(workIdx);
         Author author = work.getAuthor();
         User user = work.getUser();
         String majorName = work.getMajor().getName();

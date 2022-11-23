@@ -72,7 +72,6 @@ public class WorkController {
         Work findWork = workService.findWork(workIdx);
 
         workImgService.deleteWorkImg(workIdx);
-        //Author findAuthor = workService.getAuthorByWork(workIdx);
         Author findAuthor = findWork.getAuthor();
         workService.deleteWork(workIdx);
         authorService.deleteAuthor(findAuthor);
