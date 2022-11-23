@@ -15,4 +15,5 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
     List<Work> findWorkByUser(User user);
 
     List<Work> findWorkByDepartmentAndMajorAndYear(Department department, Major major, int year, Pageable pageable);
+
 }

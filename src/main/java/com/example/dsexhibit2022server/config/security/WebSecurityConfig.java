@@ -3,6 +3,7 @@ package com.example.dsexhibit2022server.config.security;
 import com.example.dsexhibit2022server.config.security.jwt.JwtAuthenticationFilter;
 import com.example.dsexhibit2022server.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
