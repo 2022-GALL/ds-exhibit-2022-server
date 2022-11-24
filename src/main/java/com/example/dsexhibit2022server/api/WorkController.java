@@ -123,7 +123,7 @@ public class WorkController {
         if(req.getWorkImg()==null) { throw new RestApiException(EMPTY_WORK_IMG); }
         if(req.getWorkDetailImg()==null) { throw new RestApiException(EMPTY_WORK_DETAIL_IMG); }
         if(req.getMajor()==null) { throw new RestApiException(EMPTY_MAJOR); }
-        if(req.getYear()==0) { throw new RestApiException(EMPTY_YEAR); }
+        //if(req.getYear()==0) { throw new RestApiException(EMPTY_YEAR); }
 
         // Author
         if(req.getName() == null){

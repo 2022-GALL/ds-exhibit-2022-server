@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.Basic;
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,11 +33,15 @@ public class WorkService {
                            User user, Author newAuthor, Major major) throws Exception {
         log.info("[SERVICE] work/createWork");
 
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String nowYear = sdf.format(now);
+
         Work newWork = Work.builder()
                 .title(req.getTitle())
                 .workInfo(req.getWorkInfo())
                 .workImg(req.getWorkImg())
-                .year(req.getYear())
+                .year(Integer.parseInt(nowYear))
                 .startDate(req.getStartDate())
                 .endDate(req.getEndDate())
                 .link(req.getLink())

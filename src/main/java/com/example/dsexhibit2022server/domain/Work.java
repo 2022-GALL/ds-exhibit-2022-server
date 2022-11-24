@@ -69,7 +69,7 @@ public class Work {
         this.title=req.getTitle();
         this.workInfo=req.getWorkInfo();
         this.link=req.getLink();
-        this.year=req.getYear();
+        //this.year=req.getYear();
         this.startDate=req.getStartDate();
         this.endDate=req.getEndDate();
     }

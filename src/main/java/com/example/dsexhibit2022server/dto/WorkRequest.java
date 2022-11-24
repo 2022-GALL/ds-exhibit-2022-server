@@ -27,7 +27,7 @@ public class WorkRequest {
         private List<String> workDetailImg;
         private LocalDate startDate;
         private LocalDate endDate;
-        private int year;
+        //private int year;
         private String link;
 
     }
@@ -55,24 +55,4 @@ public class WorkRequest {
 
     }
 
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    public class UpdateWorkRequest{
-        // 작가 관련 정보
-        private String name;
-        private String profileImg;
-        private String memberName;
-
-        // 작품 관련 정보
-        private String major;
-        private String title;
-        private String workInfo;
-        private String workImg;
-        private List<String> workDetailImg;
-        private LocalDate startDate;
-        private LocalDate endDate;
-        private int year;
-        private String link;
-    }
 }
