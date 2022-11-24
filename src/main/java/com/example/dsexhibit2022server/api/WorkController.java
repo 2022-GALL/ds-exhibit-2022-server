@@ -15,7 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,7 +120,6 @@ public class WorkController {
 
     // 작품 생성 시 필수값 확인
     public void checkValue(@RequestBody WorkRequest.BasicWorkRequest req){
-
         // Work
         if(req.getTitle()==null) { throw new RestApiException(EMPTY_TITLE); }
         if(req.getWorkInfo()==null) { throw new RestApiException(EMPTY_WORK_INFO); }
@@ -133,5 +136,56 @@ public class WorkController {
             throw new RestApiException(EMPTY_PROFILE_IMG);
         }
 
+        // Date
+        LocalDate start = req.getStartDate();
+        LocalDate end = req.getEndDate();
+        if(!(start == null && end == null)){
+            if(start != null && end != null){
+                //날짜 형식 체크
+                if(!(isDate(start) && isDate(end))){
+                    throw new RestApiException(INVALID_DATE_FORMAT);
+                }
+
+                if(!compareDate(start, end)){
+                    throw new RestApiException(INVALID_DURATION_FORMAT);
+                }
+            }else {
+                //startDate, endDate 중 하나만 채워져있는 경우
+                throw new RestApiException(INVALID_PROJECT_DURATION);
+            }
+        }
+
+    }
+
+    //날짜 유효성 체크
+    public static boolean isDate(LocalDate date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(date.toString());
+            return true;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //시작일, 종료일 크기 비교
+    public static boolean compareDate(LocalDate stDate, LocalDate edDate){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate = null;
+
+        try {
+            startDate = dateFormat.parse( String.valueOf(stDate) );
+            endDate = dateFormat.parse( String.valueOf(edDate) );
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+        int campare = startDate.compareTo( endDate );
+        //if(campare == 0), (campare > 0)..
+
+        //startDate < endDate(시작일 < 종료일)
+        return (campare < 0);
     }
 }
