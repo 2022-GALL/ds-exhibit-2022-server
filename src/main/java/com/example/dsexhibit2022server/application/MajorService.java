@@ -21,5 +21,4 @@ public class MajorService {
         return majorRepository.findOptionalByCode(code)
                 .orElseThrow(() -> new CustomException(HttpStatus.CONFLICT, "This major code is not exist"));
     }
-
 }

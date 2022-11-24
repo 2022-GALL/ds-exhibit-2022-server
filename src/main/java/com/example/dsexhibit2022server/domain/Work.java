@@ -1,12 +1,15 @@
 package com.example.dsexhibit2022server.domain;
 
+import com.example.dsexhibit2022server.dto.WorkRequest;
 import com.example.dsexhibit2022server.dto.WorkResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
@@ -62,6 +65,19 @@ public class Work {
     private Author author;
 
 
+    public void updateWork(WorkRequest.BasicWorkRequest req){
+        this.title=req.getTitle();
+        this.workInfo=req.getWorkInfo();
+        this.link=req.getLink();
+        this.year=req.getYear();
+        this.startDate=req.getStartDate();
+        this.endDate=req.getEndDate();
+    }
+
+    public void updateMajorAndDepartment(Major major){
+        this.major = major;
+        this.department = major.getDepartment();
+    }
 
 
     /////// -- to dto -- ///////

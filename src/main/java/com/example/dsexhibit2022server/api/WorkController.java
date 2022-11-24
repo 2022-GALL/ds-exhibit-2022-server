@@ -4,7 +4,6 @@ package com.example.dsexhibit2022server.api;
 import com.example.dsexhibit2022server.application.*;
 import com.example.dsexhibit2022server.config.global.JsonResponse;
 import com.example.dsexhibit2022server.config.global.exception.RestApiException;
-import com.example.dsexhibit2022server.config.security.jwt.JwtTokenProvider;
 import com.example.dsexhibit2022server.domain.*;
 import com.example.dsexhibit2022server.dto.WorkRequest;
 import com.example.dsexhibit2022server.dto.WorkResponse;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.example.dsexhibit2022server.config.global.exception.error.WorkErrorCode.*;
-import static com.example.dsexhibit2022server.config.global.exception.error.WorkErrorCode.POST_WORK_EMPTY_YEAR;
 
 @Slf4j
 @RestController
@@ -36,9 +34,11 @@ public class WorkController {
     private final AuthorService authorService;
 
     @PostMapping("")
-    public ResponseEntity<Object> createWork(@RequestBody WorkRequest.CreateWorkRequest req, HttpServletRequest httpServletRequest) throws Exception {
+    public ResponseEntity<Object> createWork(@RequestBody WorkRequest.BasicWorkRequest req,
+                                             HttpServletRequest httpServletRequest) throws Exception {
         log.info("[API] work/createWork");
 
+        // 작품 등록 전 체크
         userService.checkTokenValidation(httpServletRequest);
         checkValue(req);
 
@@ -62,14 +62,33 @@ public class WorkController {
         return ResponseEntity.ok(new JsonResponse(200, "success get detail info of work", response));
     }
 
+    @PatchMapping("/{workIdx}")
+    public ResponseEntity<Object> updateWork(@PathVariable("workIdx") Long workIdx,
+                                             @RequestBody WorkRequest.BasicWorkRequest req,
+                                             HttpServletRequest httpServletRequest){
+        log.info("[API] work/updateWork");
+
+        // 작품 수정 전 체크
+        Work findWork = workService.findWork(workIdx);
+        userService.checkTokenValidation(httpServletRequest);
+        checkValue(req);
+
+        Major major = majorService.getMajorByCode(req.getMajor());
+        authorService.updateAuthor(req,findWork.getAuthor());
+        workImgService.updateWorkImg(req, findWork);
+        workService.updateWork(req, findWork, major);
+
+        return ResponseEntity.ok(new JsonResponse(200, "success update work", null));
+    }
+
 
     @DeleteMapping("/{workIdx}")
     public ResponseEntity<Object> deleteWork(@PathVariable("workIdx") Long workIdx, HttpServletRequest httpServletRequest) throws Exception {
         log.info("[API] work/deleteWork");
 
-        userService.checkTokenValidation(httpServletRequest);
-
+        // 작품 삭제 전 체크
         Work findWork = workService.findWork(workIdx);
+        userService.checkTokenValidation(httpServletRequest);
 
         workImgService.deleteWorkImg(workIdx);
         Author findAuthor = findWork.getAuthor();
@@ -96,22 +115,23 @@ public class WorkController {
     }
 
     // 작품 생성 시 필수값 확인
-    public void checkValue(@RequestBody WorkRequest.CreateWorkRequest req){
+    public void checkValue(@RequestBody WorkRequest.BasicWorkRequest req){
 
         // Work
-        if(req.getTitle()==null) { throw new RestApiException(POST_WORK_EMPTY_TITLE); }
-        if(req.getWorkInfo()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_INFO); }
-        if(req.getWorkImg()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_IMG); }
-        if(req.getWorkDetailImg()==null) { throw new RestApiException(POST_WORK_EMPTY_WORK_DETAIL_IMG); }
-        if(req.getMajor()==null) { throw new RestApiException(POST_WORK_EMPTY_MAJOR); }
-        if(req.getYear()==0) { throw new RestApiException(POST_WORK_EMPTY_YEAR); }
+        if(req.getTitle()==null) { throw new RestApiException(EMPTY_TITLE); }
+        if(req.getWorkInfo()==null) { throw new RestApiException(EMPTY_WORK_INFO); }
+        if(req.getWorkImg()==null) { throw new RestApiException(EMPTY_WORK_IMG); }
+        if(req.getWorkDetailImg()==null) { throw new RestApiException(EMPTY_WORK_DETAIL_IMG); }
+        if(req.getMajor()==null) { throw new RestApiException(EMPTY_MAJOR); }
+        if(req.getYear()==0) { throw new RestApiException(EMPTY_YEAR); }
 
         // Author
         if(req.getName() == null){
-            throw new RestApiException(POST_WORK_EMPTY_NAME);
+            throw new RestApiException(EMPTY_NAME);
         }
         if(req.getProfileImg() == null){
-            throw new RestApiException(POST_WORK_EMPTY_PROFILE_IMG);
+            throw new RestApiException(EMPTY_PROFILE_IMG);
         }
+
     }
 }

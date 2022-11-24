@@ -16,7 +16,7 @@ import static com.example.dsexhibit2022server.config.global.exception.error.Work
 public class AuthorService {
     public final AuthorRepository authorRepository;
 
-    public Author createAuthor(WorkRequest.CreateWorkRequest req){
+    public Author createAuthor(WorkRequest.BasicWorkRequest req){
 
         Author newAuthor = Author.builder()
                 .name(req.getName())
@@ -27,8 +27,11 @@ public class AuthorService {
         return newAuthor;
     }
 
+    public void updateAuthor(WorkRequest.BasicWorkRequest req, Author author) {
+        author.updateAuthor(req.getName(), req.getProfileImg(), req.getProfileImg());
+    }
+
     public void deleteAuthor(Author findAuthor){
         authorRepository.delete(findAuthor);
     }
-
 }
