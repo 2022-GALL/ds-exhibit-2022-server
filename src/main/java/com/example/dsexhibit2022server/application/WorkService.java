@@ -13,6 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Basic;
+import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,15 +29,19 @@ import static com.example.dsexhibit2022server.config.global.exception.error.Work
 public class WorkService {
     private final WorkRepository workRepository;
 
-    public Work createWork(WorkRequest.CreateWorkRequest req,
+    public Work createWork(WorkRequest.BasicWorkRequest req,
                            User user, Author newAuthor, Major major) throws Exception {
         log.info("[SERVICE] work/createWork");
+
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String nowYear = sdf.format(now);
 
         Work newWork = Work.builder()
                 .title(req.getTitle())
                 .workInfo(req.getWorkInfo())
                 .workImg(req.getWorkImg())
-                .year(req.getYear())
+                .year(Integer.parseInt(nowYear))
                 .startDate(req.getStartDate())
                 .endDate(req.getEndDate())
                 .link(req.getLink())
@@ -49,7 +57,7 @@ public class WorkService {
     public Work findWork(Long workIdx){
         Optional<Work> findWork = workRepository.findById(workIdx);
         if(findWork.isEmpty()){
-            throw new RestApiException(NOT_EXISTS_WORK);
+            throw new RestApiException(NOT_EXIST_WORK);
         }
         return findWork.get();
     }
@@ -76,6 +84,17 @@ public class WorkService {
                 .link(work.getLink())
                 .build();
         return result;
+    }
+
+    @Transactional
+    public void updateWork(WorkRequest.BasicWorkRequest req, Work work, Major major){
+        log.info("[SERVICE] work/updateWork");
+
+        work.updateWork(req);
+
+        if(work.getMajor() != major){
+            work.updateMajorAndDepartment(major);
+        }
     }
 
     public void deleteWork(Long workIdx) {

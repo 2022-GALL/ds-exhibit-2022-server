@@ -26,4 +26,10 @@ public class Author {
 
     @Column(length = 500)
     private String memberName;
+
+    public void updateAuthor(String name, String profileImg, String memberName){
+        this.name=name;
+        this.profileImg=profileImg;
+        this.memberName=memberName;
+    }
 }

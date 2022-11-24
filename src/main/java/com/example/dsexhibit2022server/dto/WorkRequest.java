@@ -12,7 +12,7 @@ public class WorkRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
-    public static class CreateWorkRequest{
+    public static class BasicWorkRequest{
 
         // 작가 관련 정보
         private String name;
@@ -27,7 +27,7 @@ public class WorkRequest {
         private List<String> workDetailImg;
         private LocalDate startDate;
         private LocalDate endDate;
-        private int year;
+        //private int year;
         private String link;
 
     }
@@ -54,4 +54,5 @@ public class WorkRequest {
         private String link;
 
     }
+
 }
