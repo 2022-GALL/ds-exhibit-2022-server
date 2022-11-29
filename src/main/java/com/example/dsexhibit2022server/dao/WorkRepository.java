@@ -14,6 +14,8 @@ import java.util.List;
 public interface WorkRepository extends JpaRepository<Work, Long> {
     List<Work> findWorkByUser(User user);
 
+    List<Work> findWorkByDepartmentAndMajor(Department department, Major major, Pageable pageable);
+
     List<Work> findWorkByDepartmentAndMajorAndYear(Department department, Major major, int year, Pageable pageable);
 
 }

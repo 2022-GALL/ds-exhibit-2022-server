@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.Basic;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -111,8 +112,17 @@ public class WorkService {
     }
 
     public List<WorkResponse.WorkThumbnailResponse> getWorkList(Department department, Major major, int year, Pageable pageable) {
-
-        List<Work> workList = workRepository.findWorkByDepartmentAndMajorAndYear(department, major, year, pageable);
+        List<Work> workList;
+//        if(department.equals("all") && major.equals("all")){
+//            //전체 학과
+//            workList = (List<Work>) workRepository.findAll(pageable);
+//        }
+        if(year == 0){
+            //전체 연도
+            workList = workRepository.findWorkByDepartmentAndMajor(department, major, pageable);
+        } else{
+            workList = workRepository.findWorkByDepartmentAndMajorAndYear(department, major, year, pageable);
+        }
         return workList.stream().map(work -> work.toThumbnailResponse()).collect(Collectors.toList());
     }
 
