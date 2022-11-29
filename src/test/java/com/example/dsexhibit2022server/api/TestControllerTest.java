@@ -1,3 +1,4 @@
+/*
 package com.example.dsexhibit2022server.api;
 
 import com.example.dsexhibit2022server.api.util.TestUtil;
@@ -71,6 +72,7 @@ class TestControllerTest {
     }
 
 ////가장 베이직한 것만 남긴 코드
+*/
 /*
 
     @Test
@@ -94,10 +96,12 @@ class TestControllerTest {
         verify(jwtTokenProvider).getUserPKByServlet(servletRequest);
 
     }
+*//*
+
+
+
+
 */
-
-
-
 /*
 
 //
@@ -111,6 +115,8 @@ class TestControllerTest {
     void checkTokenInfo() throws Exception {
         String jwtToken = "eyJhbGciOiJIU어쩌구임시토큰값.CI6MTY2OTQwMDA5NX0.7Rk629fsOjEhUb3fB7MrNg";
         String email = "jh@email";
+*//*
+
 */
 /*
 
@@ -124,6 +130,10 @@ class TestControllerTest {
 
 //        MockitoAnnotations.initMocks(this); //?
 *//*
+*/
+/*
+
+*//*
 
 */
 /*
@@ -131,6 +141,10 @@ class TestControllerTest {
         params.put("X-AUTH-TOKEN", new String[] {jwtToken});
         HttpServletRequest servletRequest = TestUtil.getRequest(params);
         *//*
+*/
+/*
+
+*//*
 
 */
 /*
@@ -152,11 +166,17 @@ class TestControllerTest {
             }
         }).when(servletRequest).getHeader("X-AUTH-TOKEN"); //.getHeader("Content-Type");
 *//*
+*/
+/*
+
+*//*
 
 */
 /*
         mockMvc = MockMvcBuilders.webAppContextSetup(this.context).addFilter( new CharacterEncodingFilter("UTF-8", true)).build();
 *//*
+*/
+/*
 
 
         MockHttpServletRequest servletRequest = new MockHttpServletRequest();
@@ -192,7 +212,8 @@ class TestControllerTest {
         verify(jwtTokenProvider).getUserPKByServlet(servletRequest);
 
     }
-*/
+*//*
 
 
-}
+
+}*/

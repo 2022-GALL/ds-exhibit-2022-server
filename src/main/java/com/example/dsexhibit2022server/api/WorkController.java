@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import static com.example.dsexhibit2022server.config.global.exception.error.WorkErrorCode.*;
 
+@CrossOrigin(origins = "*")
 @Slf4j
 @RestController
 @RequestMapping("api/works")
