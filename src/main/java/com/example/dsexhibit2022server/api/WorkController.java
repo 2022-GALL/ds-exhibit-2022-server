@@ -119,6 +119,17 @@ public class WorkController {
         return ResponseEntity.ok(new JsonResponse(200, "success get work list", response));
     }
 
+
+    @GetMapping("/all")
+    public ResponseEntity<Object> getAllWorkList(@RequestParam int page) {
+        log.info("[API] work/getAllWorkList");
+
+        PageRequest pageRequest = PageRequest.of(page, 50);
+
+        List<WorkResponse.WorkThumbnailResponse> response = workService.getAllWorkList(pageRequest);
+        return ResponseEntity.ok(new JsonResponse(200, "success get all work list", response));
+    }
+
     // 작품 생성 시 필수값 확인
     public void checkValue(@RequestBody WorkRequest.BasicWorkRequest req){
         // Work
