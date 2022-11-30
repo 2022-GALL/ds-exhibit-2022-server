@@ -9,6 +9,7 @@ import com.example.dsexhibit2022server.dto.WorkResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.CustomEditorConfigurer;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -126,4 +127,10 @@ public class WorkService {
         return workList.stream().map(work -> work.toThumbnailResponse()).collect(Collectors.toList());
     }
 
+    public List<WorkResponse.WorkThumbnailResponse> getAllWorkList(Pageable pageable) {
+        //전체 학과
+        Page<Work> workList = workRepository.findAll(pageable);
+
+        return workList.stream().map(work -> work.toThumbnailResponse()).collect(Collectors.toList());
+    }
 }
