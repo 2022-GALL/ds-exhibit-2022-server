@@ -30,6 +30,7 @@ public class WorkResponse {
         private String workImg;
         private String title;
         private String authorName;
+        private Long workIdx;
     }
 
     @Builder

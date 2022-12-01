@@ -89,6 +89,7 @@ public class Work {
                 .workImg(this.workImg)
                 .title(this.title)
                 .authorName(this.author.getName())
+                .workIdx(this.workIdx)
                 .build();
     }
 }
