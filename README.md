@@ -14,7 +14,6 @@
     - Hibernate Bean Validator
     - Pageable
     - Lombok
-    - JUnit 단위테스트
 
 * 팀원 소개😀
     + 박지혜 : PM, BE
