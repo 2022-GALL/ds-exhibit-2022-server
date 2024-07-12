@@ -11,8 +11,6 @@
     그 외 
     - JPA
     - JWT
-    - Hibernate Bean Validator
-    - Pageable
     - Lombok
 
 * 팀원 소개😀
@@ -20,6 +18,14 @@
     + 이유종 : BE
     + 김지민 : FE (React.js)
     + 임다희 : FE (React.js)
+
+* API 명세서
+  ![image](https://github.com/user-attachments/assets/8f2179c4-e9e6-4107-9150-5ee108af0bee)
+
+* ERD
+  ![image](https://github.com/user-attachments/assets/aadc8938-f453-42c8-95c8-e450c5fc995c)
+
+
 
 * 프로젝트 소개📝
 
